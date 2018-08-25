@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 
 public class Movie implements Serializable {
-    private final long id=1L;
+    private final long id = 1L;
 
     private String title;
     private String director;

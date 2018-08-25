@@ -19,7 +19,7 @@ import com.uk.moviedirectory.Utility.Constants;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class details_activity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private Movie movie;
     private TextView title;
@@ -42,21 +42,22 @@ public class details_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_activity);
 
-        requestQueue= Volley.newRequestQueue(details_activity.this);
+        requestQueue= Volley.newRequestQueue(DetailsActivity.this);
 
         setUI();
-        String imdBid=movie.getImdbId();
-        fetchJson(imdBid);
+        String imdBid = movie.getImdbId();
+        fetchMovieDetails(imdBid);
 
     }
 
-    private void fetchJson(String imdbID) {
+    private void fetchMovieDetails(String imdbID) {
 
-        JsonObjectRequest request=new JsonObjectRequest(JsonObjectRequest.Method.GET,
+        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.GET,
                 Constants.DETAILS_URL + imdbID + Constants.RIGHT_URL,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
                         title.setText(movie.getTitle());
                         release_year.setText(movie.getYear());
                         category.setText(movie.getMovieType());
@@ -90,18 +91,20 @@ public class details_activity extends AppCompatActivity {
     }
 
     private void setUI() {
-        movie= (Movie) getIntent().getSerializableExtra("movie");
-        poster_image=findViewById(R.id.image_details);
-        title=findViewById(R.id.title_details);
-        release_year=findViewById(R.id.release_year_details);
-        category=findViewById(R.id.category_details);
-        runtime=findViewById(R.id.runtime_details);
-        release_date=findViewById(R.id.release_date_details);
-        rating=findViewById(R.id.rating_details);
-        actors=findViewById(R.id.actors_details);
-        director=findViewById(R.id.director_Details);
-        Country=findViewById(R.id.country_Details);
-        Writer=findViewById(R.id.writer_details);
-        BoxOffice=findViewById(R.id.box_office_details);
+
+        movie = (Movie) getIntent().getSerializableExtra("movie");
+        poster_image = findViewById(R.id.image_details);
+        title = findViewById(R.id.title_details);
+        release_year = findViewById(R.id.release_year_details);
+        category = findViewById(R.id.category_details);
+        runtime = findViewById(R.id.runtime_details);
+        release_date = findViewById(R.id.release_date_details);
+        rating = findViewById(R.id.rating_details);
+        actors = findViewById(R.id.actors_details);
+        director = findViewById(R.id.director_Details);
+        Country = findViewById(R.id.country_Details);
+        Writer = findViewById(R.id.writer_details);
+        BoxOffice = findViewById(R.id.box_office_details);
+
     }
 }

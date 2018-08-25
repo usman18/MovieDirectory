@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.uk.moviedirectory.Activities.details_activity;
+import com.uk.moviedirectory.Activities.DetailsActivity;
 import com.uk.moviedirectory.Model.Movie;
 import com.uk.moviedirectory.R;
 
@@ -31,7 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View inflated_view= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view,
+        View inflated_view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view,
                 parent,false);
 
         return new ViewHolder(inflated_view);
@@ -39,10 +39,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Movie movie=movies.get(position);
-        String image_link=movie.getPoster();
+        Movie movie = movies.get(position);
+        String image_link = movie.getPoster();
 
         Picasso.with(context).load(image_link).placeholder(android.R.drawable.stat_notify_error).into(holder.movie_poster);
+
         holder.movie_title.setText(movie.getTitle());
         holder.release_year.setText(movie.getYear());
         holder.category.setText(movie.getMovieType());
@@ -64,17 +65,17 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            movie_poster=itemView.findViewById(R.id.movie_image_view);
-            movie_title=itemView.findViewById(R.id.movie_title_view);
-            release_year=itemView.findViewById(R.id.release_id_view);
-            category=itemView.findViewById(R.id.category_view);
+            movie_poster = itemView.findViewById(R.id.movie_image_view);
+            movie_title = itemView.findViewById(R.id.movie_title_view);
+            release_year = itemView.findViewById(R.id.release_id_view);
+            category = itemView.findViewById(R.id.category_view);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Movie movie=movies.get(getAdapterPosition());
-                    Intent intent=new Intent(context,details_activity.class);
+                    Intent intent = new Intent(context,DetailsActivity.class);
 
                     intent.putExtra("movie",movie);
                     context.startActivity(intent);
