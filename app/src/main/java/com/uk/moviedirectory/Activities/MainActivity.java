@@ -1,9 +1,11 @@
 package com.uk.moviedirectory.Activities;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -36,12 +38,18 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private RequestQueue queue;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private MovieAdapter adapter;
     private List<Movie> movies;
     private AlertDialog alertDialog;
     private AlertDialog.Builder builder;
     private EditText et_name;
     private Button btn_search;
+
+
+    //Default would be list type view
+    private int view_type = MovieAdapter.LIST_TYPE;
+    private int grid_count = 2;//bt default for portrait mode
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        int orientation = getResources().getConfiguration().orientation;
+
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            grid_count = 4;
+        } else {
+            grid_count = 2;
+        }
+
         queue = Volley.newRequestQueue(this);
         movies = new ArrayList<>();
 
@@ -64,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         fetchMovies(search);
 
-        adapter = new MovieAdapter(this,movies);
+        adapter = new MovieAdapter(this,movies,view_type);
         recyclerView.setAdapter(adapter);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -137,7 +154,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.view_type) {
 
-            item.setIcon(R.drawable.ic_list);
+            if (view_type == MovieAdapter.LIST_TYPE) {
+
+                view_type = MovieAdapter.GRID_TYPE;
+                item.setIcon(R.drawable.ic_list);
+
+                adapter = new MovieAdapter(getApplicationContext(),movies,view_type);
+                recyclerView.setLayoutManager(new GridLayoutManager(this,grid_count));
+                recyclerView.setAdapter(adapter);
+
+            }else if (view_type == MovieAdapter.GRID_TYPE) {
+
+                view_type = MovieAdapter.LIST_TYPE;
+                item.setIcon(R.drawable.ic_grid);
+
+                adapter = new MovieAdapter(getApplicationContext(),movies,view_type);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+                recyclerView.setAdapter(adapter);
+
+            }
 
         }
 
