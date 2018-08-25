@@ -7,8 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.uk.moviedirectory.Data.MovieAdapter;
@@ -42,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog.Builder builder;
     private EditText et_name;
     private Button btn_search;
+    private boolean result = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
         //Using shared preferences to fetch the previous search and provide the user with the results of the same
         Preference preference = new Preference(MainActivity.this);
         String search = preference.getPreferences();
+
         fetchMovies(search);
 
         adapter = new MovieAdapter(this,movies);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                                 movies.add(movie);
 
                             }
+
                             adapter.notifyDataSetChanged();
 
                         } catch (JSONException e) {
@@ -115,9 +114,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Toast.makeText(getApplicationContext(),"OnError",Toast.LENGTH_SHORT).show();
-                VolleyLog.d("error ", error.getMessage());
-
+                Toast.makeText(getApplicationContext(),"Could not find movies ",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -125,28 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
 
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        if (id == R.id.search) {
-            showAlertDialog();
-            //return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     private void showAlertDialog() {
 
@@ -177,5 +153,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
 
     }
+
+
 
 }

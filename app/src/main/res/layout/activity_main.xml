@@ -24,6 +24,8 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
+        android:backgroundTint="#FFFF00"
+        android:tint="#000000"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
