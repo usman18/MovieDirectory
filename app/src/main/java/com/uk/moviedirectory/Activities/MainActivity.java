@@ -9,6 +9,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -36,7 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private RequestQueue queue;
+
+    private RequestQueue queue;     // instantiate this only once
     private RecyclerView recyclerView;
     private MovieAdapter adapter;
     private List<Movie> movies;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText et_name;
     private Button btn_search;
 
+    final String KEY_VIEW_TYPE = "view_type";
 
     //Default would be list type view
     private int view_type = MovieAdapter.LIST_TYPE;
@@ -56,8 +59,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (savedInstanceState != null){
+            Log.d("TAG", "onCreate: " + "saved instance not null");
+            view_type = savedInstanceState.getInt(KEY_VIEW_TYPE);
+            Log.d("TAG", "onCreate: " + "viewtype : " + view_type);
+
+            if (view_type == 0) {
+                view_type = MovieAdapter.LIST_TYPE;
+            }
+
+        }else
+            Log.d("TAG", "onCreate: " + "saved instance not null");
+
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        recyclerView = findViewById(R.id.recycler_view);
 
         int orientation = getResources().getConfiguration().orientation;
 
@@ -67,13 +84,20 @@ public class MainActivity extends AppCompatActivity {
             grid_count = 2;
         }
 
+
         queue = Volley.newRequestQueue(this);
         movies = new ArrayList<>();
 
-        recyclerView =findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (view_type == MovieAdapter.LIST_TYPE) {
 
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        }else if (view_type == MovieAdapter.GRID_TYPE) {
+
+            recyclerView.setLayoutManager(new GridLayoutManager(this,grid_count));
+            recyclerView.setHasFixedSize(true);
+        }
 
         //Using shared preferences to fetch the previous search and provide the user with the results of the same
         Preference preference = new Preference(MainActivity.this);
@@ -92,6 +116,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_VIEW_TYPE,view_type);
+        Log.d("TAG", "onSaveInstanceState: " + "ViewType : " + view_type);
+        super.onSaveInstanceState(outState);
     }
 
     private void fetchMovies(final String search) {
