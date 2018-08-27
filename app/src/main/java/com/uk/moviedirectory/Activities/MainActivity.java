@@ -2,7 +2,6 @@ package com.uk.moviedirectory.Activities;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Default would be list type view
     private int view_type = MovieAdapter.LIST_TYPE;
-    private int grid_count = 2;//bt default for portrait mode
+    private int grid_count = 2;    //by default for portrait mode
 
 
     @Override
@@ -59,6 +58,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        initialize(savedInstanceState); //Initializes all required instances and performs a search based on the last search made by user
+
+
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(KEY_VIEW_TYPE,view_type);
+        Log.d("TAG", "onSaveInstanceState: " + "ViewType : " + view_type);
+        super.onSaveInstanceState(outState);
+    }
+
+
+
+    private void initialize(Bundle savedInstanceState) {
         if (savedInstanceState != null){
             Log.d("TAG", "onCreate: " + "saved instance not null");
             view_type = savedInstanceState.getInt(KEY_VIEW_TYPE);
@@ -73,16 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         recyclerView = findViewById(R.id.recycler_view);
 
-        int orientation = getResources().getConfiguration().orientation;
-
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            grid_count = 4;
-        } else {
-            grid_count = 2;
-        }
 
 
         queue = Volley.newRequestQueue(this);
@@ -94,6 +102,18 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         }else if (view_type == MovieAdapter.GRID_TYPE) {
+
+
+            //getting orientation of the device (portrait or landscape)
+            int orientation = getResources().getConfiguration().orientation;
+
+
+            //setting the grid count depending upon orientation
+            if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                grid_count = 4;
+            } else {
+                grid_count = 2;
+            }
 
             recyclerView.setLayoutManager(new GridLayoutManager(this,grid_count));
             recyclerView.setHasFixedSize(true);
@@ -108,23 +128,14 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MovieAdapter(this,movies,view_type);
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showAlertDialog();
-            }
-        });
+
+        //Search Fab
+        findViewById(R.id.fab)
+                .setOnClickListener(view -> showAlertDialog());
+
 
     }
 
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putInt(KEY_VIEW_TYPE,view_type);
-        Log.d("TAG", "onSaveInstanceState: " + "ViewType : " + view_type);
-        super.onSaveInstanceState(outState);
-    }
 
     private void fetchMovies(final String search) {
 
