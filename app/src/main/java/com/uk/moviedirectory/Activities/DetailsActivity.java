@@ -2,7 +2,9 @@ package com.uk.moviedirectory.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.android.volley.RequestQueue;
@@ -16,6 +18,7 @@ import com.uk.moviedirectory.Model.Movie;
 import com.uk.moviedirectory.R;
 import com.uk.moviedirectory.Utility.Constants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +37,8 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView Writer;
     private TextView BoxOffice;
     private ImageView poster_image;
+
+    private RatingBar mRatingBar;
 
 
 
@@ -58,6 +63,8 @@ public class DetailsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
 
+                        Log.d("Object",response.toString());
+
                         title.setText(movie.getTitle());
                         release_year.setText(movie.getYear());
                         category.setText(movie.getMovieType());
@@ -70,6 +77,10 @@ public class DetailsActivity extends AppCompatActivity {
                             runtime.setText("Runtime : "+response.getString("Runtime"));
                             release_date.setText("Release Date : "+response.getString("Released"));
                             rating.setText("Rated : "+response.getString("Rated"));
+
+                            float rating = getRating(response.getJSONArray("Ratings"));
+                            mRatingBar.setRating(rating);
+
                             actors.setText("Actors : "+response.getString("Actors"));
                             director.setText("Director : "+response.getString("Director"));
                             Writer.setText("Writer : "+response.getString("Writer"));
@@ -106,5 +117,46 @@ public class DetailsActivity extends AppCompatActivity {
         Writer = findViewById(R.id.writer_details);
         BoxOffice = findViewById(R.id.box_office_details);
 
+        mRatingBar = findViewById(R.id.ratingbar);
+
+    }
+
+    private float getRating(JSONArray array) {
+
+        if (array != null) {
+
+            try {
+                JSONObject object = array.getJSONObject(0);
+
+                if (object != null) {
+
+                    String rating = object.getString("Value");
+
+                    if (rating != null){
+
+                        int index = rating.indexOf("/");
+
+                        //rating is in the form of String (eg.  8/10 )
+                        //so parsing the string to get the required part
+                        float ratingReceived = Float.parseFloat(rating.substring(0,index));
+                        float maxRating = Float.parseFloat(rating.substring(index+1));
+
+                        float dividing_factor = (float) (maxRating/5.0);
+                        ratingReceived /= dividing_factor;
+
+                        Log.d("Rating", "getRating: " + ratingReceived);
+
+                        return ratingReceived;
+
+                    }
+
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return 0;
     }
 }

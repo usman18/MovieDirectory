@@ -165,4 +165,6 @@ public class Movie implements Serializable {
     public void setMovieType(String movieType) {
         this.movieType = movieType;
     }
+
+
 }

@@ -11,12 +11,13 @@
         android:id="@+id/card_view_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="8dp"
         android:layout_margin="@dimen/cardview_default_elevation">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp">
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/image_details"
@@ -25,13 +26,16 @@
                 android:background="#000000" />
 
             <TextView
+                android:textSize="16sp"
                 android:id="@+id/title_details"
                 android:layout_width="wrap_content"
+                android:fontFamily="@font/acme"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_toRightOf="@id/image_details"
                 android:text="Movie title"
-                android:textStyle="bold" />
+                android:textColor="#050505"
+                />
 
             <TextView
                 android:id="@+id/release_year_details"
@@ -53,6 +57,7 @@
                 android:layout_toRightOf="@id/image_details"
                 android:text="Category : " />
 
+
             <TextView
                 android:id="@+id/runtime_details"
                 android:layout_width="wrap_content"
@@ -70,12 +75,26 @@
                 android:text="Release Date : " />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/rating_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/release_date_details"
                 android:layout_marginTop="5dp"
                 android:text="Rating : " />
+
+            <RatingBar
+                android:id="@+id/ratingbar"
+                android:layout_marginTop="4dp"
+                android:soundEffectsEnabled="true"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:numStars="5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/release_date_details"
+                android:layout_centerHorizontal="true"
+                />
+
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
