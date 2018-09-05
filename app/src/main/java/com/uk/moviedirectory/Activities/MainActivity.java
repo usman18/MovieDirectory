@@ -4,9 +4,9 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -115,7 +115,13 @@ public class MainActivity extends AppCompatActivity {
                 grid_count = 2;
             }
 
-            recyclerView.setLayoutManager(new GridLayoutManager(this,grid_count));
+            StaggeredGridLayoutManager
+                    staggeredGridLayoutManager = new StaggeredGridLayoutManager(grid_count,StaggeredGridLayoutManager.VERTICAL);
+
+            staggeredGridLayoutManager.setGapStrategy(2);
+            recyclerView.setLayoutManager(staggeredGridLayoutManager);
+
+//            recyclerView.setLayoutManager(new GridLayoutManager(this,grid_count));
             recyclerView.setHasFixedSize(true);
         }
 
@@ -203,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 item.setIcon(R.drawable.ic_list);
 
                 adapter = new MovieAdapter(getApplicationContext(),movies,view_type);
-                recyclerView.setLayoutManager(new GridLayoutManager(this,grid_count));
+                recyclerView.setLayoutManager(new StaggeredGridLayoutManager(grid_count,StaggeredGridLayoutManager.VERTICAL));
                 recyclerView.setAdapter(adapter);
 
             }else if (view_type == MovieAdapter.GRID_TYPE) {

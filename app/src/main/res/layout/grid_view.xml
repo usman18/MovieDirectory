@@ -8,7 +8,7 @@
     <android.support.v7.widget.CardView
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="4dp"
         android:layout_marginTop="6dp"
@@ -25,7 +25,7 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:background="#000000"
                 android:id="@+id/grid_movie_img"
                 android:scaleType="fitCenter"
@@ -42,7 +42,6 @@
                 android:layout_marginTop="8dp"
                 android:text="Movie Name"
                 android:textSize="14sp"
-                android:maxLines="2"
                 android:textColor="#050505"
                 />
 
@@ -51,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/grid_movie_released"
                 android:text="Released : "
-                android:maxLines="1"
                 android:paddingStart="8dp"
                 android:layout_marginTop="2dp"
                 android:paddingEnd="8dp"
